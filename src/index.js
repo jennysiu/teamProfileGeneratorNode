@@ -1,30 +1,31 @@
 // todo consider adding user input validations for the Class js files
 
-import Manager from "../lib/Manager";
-import Engineer from "../lib/Engineer";
-import Intern from "../lib/Intern";
-import inquirer from "inquirer";
-import path from "path";
-import fs from "fs";
+const Manager = require("../lib/Manager");
+const Engineer = require("../lib/Engineer");
+const Intern = require("../lib/Intern");
+const inquirer = require("inquirer");
+const path = require("path");
+const fs = require("fs");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-const render = require("./src/page-template.js");
+let engineers = [];
+let interns = [];
+
+// const render = require("./src/page-template.js");
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
 
-// const manager = new Manager(promptManagerInfo());
-// const engineer = new Engineer(promptEngineerInfo());
-// const intern = new Intern(promptInternInfo());
+
 
 // start user prompts
-function initPrompts() {
-  promptManagerInfo();
-  promptTeamMember();
-  while (!answers.memberChoice === "Finish building team") {
-    promptTeamMember();
-  }
+async function initPrompts() {
+  const manager = new Manager(await promptManagerInfo());
+  let memberChoice;
+  do {
+    memberChoice = await promptTeamMember();
+  } while (memberChoice !== "Finish building team") 
 }
 
 initPrompts();
@@ -55,30 +56,35 @@ function promptManagerInfo() {
   ])
 }
 
-function promptTeamMember() {
-  return inquirer.prompt([
+async function promptTeamMember() {
+  const response = await inquirer.prompt([
     {
     type: "list",
     name: "memberChoice",
     message: "Which team member would you like to add? ",
-    choices: ["Add an Engineer", "Add an Intern", "Finish building team"]
+    choices: ["Add an engineer", "Add an intern", "Finish building team"]
     }
-  ]).then(answers => {
-    switch (answers.action) {
+  ]);
+    switch (response.memberChoice) {
       case "Add an engineer":
         // call function to prompt for engineer details
-        promptEngineerInfo();
+        const engineerDetails = await promptEngineerInfo();
+        // create new engineer 
+        const engineer = new Engineer(engineerDetails);
+        engineers.push(engineer);
         break;
       case "Add an intern":
         // call function to prompt for interns details
-        promptInternInfo();
+        const internDetails = await promptInternInfo()
+        // create new intern
+        const intern = new Intern(internDetails);
+        interns.push(intern);
         break;
       case "Finish building team":
         console.log("Creating the team...");
-        break;
+        return response.memberChoice;
     }
-  })
-} 
+}
 
 function promptEngineerInfo() {
   console.log("Please enter the engineer's details: ");
