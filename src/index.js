@@ -6,33 +6,39 @@ const Intern = require("../lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const fsp = require("fs/promises");
+const { type } = require("os");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
+const render = require("../src/page-template");
+const pageTemplate = require("../src/page-template");
 
 let engineers = [];
 let interns = [];
 
-// const render = require("./src/page-template.js");
-
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
-
-
 
 // start user prompts
 async function initPrompts() {
-  const manager = new Manager(await promptManagerInfo());
+  const managerDetails = await promptManagerInfo()
+  console.log(managerDetails)
+  const manager = new Manager(managerDetails);
   let memberChoice;
   do {
     memberChoice = await promptTeamMember();
   } while (memberChoice !== "Finish building team") 
+
+  let team = [manager, engineers, interns]
+  // console.log(team)
+  writeToFile(team);
 }
 
 initPrompts();
 
-function promptManagerInfo() {
+async function promptManagerInfo() {
   console.log("Please enter the team manager's details: ");
-  return inquirer.prompt([
+  const answers = await inquirer.prompt([
     {
       type: "input",
       name: "name",
@@ -54,6 +60,7 @@ function promptManagerInfo() {
       message: "Team manager's office number: "
     }
   ])
+  return answers;
 }
 
 async function promptTeamMember() {
@@ -81,14 +88,13 @@ async function promptTeamMember() {
         interns.push(intern);
         break;
       case "Finish building team":
-        console.log("Creating the team...");
         return response.memberChoice;
     }
 }
 
-function promptEngineerInfo() {
+async function promptEngineerInfo() {
   console.log("Please enter the engineer's details: ");
-  return inquirer.prompt([
+  const answers = await inquirer.prompt([
     {
       type: "input",
       name: "name",
@@ -101,20 +107,21 @@ function promptEngineerInfo() {
     },
     {
       type: "input",
-      name: "managerEmail",
+      name: "email",
       message: "Engineer's email: "
     },
     {
       type: "input",
-      name: "managerOfficeNumber",
+      name: "github",
       message: "Engineer's GitHub username: "
     }
   ])
+  return answers;
 }
 
-function promptInternInfo() {
+async function promptInternInfo() {
   console.log("Please enter the Intern's details: ");
-  return inquirer.prompt([
+  const answers = await inquirer.prompt([
     {
       type: "input",
       name: "name",
@@ -136,6 +143,21 @@ function promptInternInfo() {
       message: "Intern's school: "
     }
   ])
+  return answers;
 }
 
+async function writeToFile(team) {
+  console.log("Starting write to file..");
+
+  try {
+    const html = pageTemplate(team);
+
+    await fsp.writeFile(outputPath, html);
+    console.log("Successfully wrote to file");
+  } catch (err) {
+    console.log(err);
+  }
+
+
+}
 
