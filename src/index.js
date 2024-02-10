@@ -6,15 +6,16 @@ const Intern = require("../lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const fsp = require("fs/promises");
 const { type } = require("os");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
+const render = require("../src/page-template");
+const pageTemplate = require("../src/page-template");
 
 let engineers = [];
 let interns = [];
-
-// const render = require("./src/page-template.js");
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
 
@@ -29,8 +30,8 @@ async function initPrompts() {
   } while (memberChoice !== "Finish building team") 
 
   let team = [manager, engineers, interns]
-  console.log(team)
-  // writeToFile(team);
+  // console.log(team)
+  writeToFile(team);
 }
 
 initPrompts();
@@ -145,7 +146,18 @@ async function promptInternInfo() {
   return answers;
 }
 
-function writeToFile(team) {
+async function writeToFile(team) {
+  console.log("Starting write to file..");
+
+  try {
+    const html = pageTemplate(team);
+
+    await fsp.writeFile(outputPath, html);
+    console.log("Successfully wrote to file");
+  } catch (err) {
+    console.log(err);
+  }
+
 
 }
 
