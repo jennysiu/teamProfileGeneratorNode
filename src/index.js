@@ -17,15 +17,18 @@ let interns = [];
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
 
-
-
 // start user prompts
 async function initPrompts() {
-  const manager = new Manager(await promptManagerInfo());
+  const managerDetails = await promptManagerInfo()
+  const manager = new Manager(managerDetails);
   let memberChoice;
   do {
     memberChoice = await promptTeamMember();
   } while (memberChoice !== "Finish building team") 
+
+  let team = [manager, engineers, interns]
+  console.log(team)
+  writeToFile(team);
 }
 
 initPrompts();
@@ -81,7 +84,6 @@ async function promptTeamMember() {
         interns.push(intern);
         break;
       case "Finish building team":
-        console.log("Creating the team...");
         return response.memberChoice;
     }
 }
@@ -138,4 +140,7 @@ function promptInternInfo() {
   ])
 }
 
+function writeToFile(team) {
+
+}
 
