@@ -5,7 +5,6 @@ const Engineer = require("../lib/Engineer");
 const Intern = require("../lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
-const fs = require("fs");
 const fsp = require("fs/promises");
 const { type } = require("os");
 
@@ -17,13 +16,12 @@ const pageTemplate = require("../src/page-template");
 let engineers = [];
 let interns = [];
 
-// TODO: Write Code to gather information about the development team members, and render the HTML file.
+// -- TODO: Write Code to gather information about the development team members, and render the HTML file.
 
 // start user prompts
 async function initPrompts() {
-  const managerDetails = await promptManagerInfo()
-  console.log(managerDetails)
-  const manager = new Manager(managerDetails);
+  let manager = await promptManagerInfo()
+  // console.log(managerDetails)
   let memberChoice;
   do {
     memberChoice = await promptTeamMember();
@@ -60,7 +58,8 @@ async function promptManagerInfo() {
       message: "Team manager's office number: "
     }
   ])
-  return answers;
+  return new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+
 }
 
 async function promptTeamMember() {
@@ -74,17 +73,13 @@ async function promptTeamMember() {
   ]);
     switch (response.memberChoice) {
       case "Add an engineer":
-        // call function to prompt for engineer details
-        const engineerDetails = await promptEngineerInfo();
-        // create new engineer 
-        const engineer = new Engineer(engineerDetails);
+        // call function to prompt for engineer details to create new engineer
+        const engineer = await promptEngineerInfo();
         engineers.push(engineer);
         break;
       case "Add an intern":
-        // call function to prompt for interns details
-        const internDetails = await promptInternInfo()
-        // create new intern
-        const intern = new Intern(internDetails);
+        // call function to prompt for interns details to create new intern
+        const intern = await promptInternInfo()
         interns.push(intern);
         break;
       case "Finish building team":
@@ -116,7 +111,8 @@ async function promptEngineerInfo() {
       message: "Engineer's GitHub username: "
     }
   ])
-  return answers;
+  return new Engineer(answers.name, answers.id, answers.email, answers.github);
+
 }
 
 async function promptInternInfo() {
@@ -143,11 +139,12 @@ async function promptInternInfo() {
       message: "Intern's school: "
     }
   ])
-  return answers;
+  return new Intern(answers.name, answers.id, answers.email, answers.school);
 }
 
 async function writeToFile(team) {
   console.log("Starting write to file..");
+  console.log(team)
 
   try {
     const html = pageTemplate(team);
@@ -157,7 +154,5 @@ async function writeToFile(team) {
   } catch (err) {
     console.log(err);
   }
-
-
 }
 

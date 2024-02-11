@@ -58,25 +58,23 @@ const generateTeam = team => {
         `;
     };
 
-    // const html = [];
+    const html = [];
 
-    // html.push(team
-    //     .filter(employee => employee.getRole() === "Manager")
-    //     .map(manager => generateManager(manager))
-    // );
-    // html.push(team
-    //     .filter(employee => employee.getRole() === "Engineer")
-    //     .map(engineer => generateEngineer(engineer))
-    //     .join("")
-    // );
-    // html.push(team
-    //     .filter(employee => employee.getRole() === "Intern")
-    //     .map(intern => generateIntern(intern))
-    //     .join("")
-    // );
+    let manager = team[0];
+    html.push(generateManager(manager));
 
-    // return html.join("");
+    html.push(team[1]
+        .filter(employee => employee.getRole() === "Engineer")
+        .map(engineer => generateEngineer(engineer))
+        .join("")
+    );
+    html.push(team[2]
+        .filter(employee => employee.getRole() === "Intern")
+        .map(intern => generateIntern(intern))
+        .join("")
+    );
 
+    return html.join("");
 }
 
 // exports function to generate entire page
