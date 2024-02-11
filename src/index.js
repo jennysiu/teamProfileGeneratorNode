@@ -21,16 +21,15 @@ let interns = [];
 
 // start user prompts
 async function initPrompts() {
-  const managerDetails = await promptManagerInfo()
-  console.log(managerDetails)
-  const manager = new Manager(managerDetails);
+  let manager = await promptManagerInfo()
+  // console.log(managerDetails)
   let memberChoice;
   do {
     memberChoice = await promptTeamMember();
   } while (memberChoice !== "Finish building team") 
 
   let team = [manager, engineers, interns]
-  console.log(team)
+  // console.log(team)
   writeToFile(team);
 }
 
@@ -60,7 +59,8 @@ async function promptManagerInfo() {
       message: "Team manager's office number: "
     }
   ])
-  return answers;
+  return new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+
 }
 
 async function promptTeamMember() {
@@ -74,17 +74,13 @@ async function promptTeamMember() {
   ]);
     switch (response.memberChoice) {
       case "Add an engineer":
-        // call function to prompt for engineer details
-        const engineerDetails = await promptEngineerInfo();
-        // create new engineer 
-        const engineer = new Engineer(engineerDetails);
+        // call function to prompt for engineer details to create new engineer
+        const engineer = await promptEngineerInfo();
         engineers.push(engineer);
         break;
       case "Add an intern":
-        // call function to prompt for interns details
-        const internDetails = await promptInternInfo()
-        // create new intern
-        const intern = new Intern(internDetails);
+        // call function to prompt for interns details to create new intern
+        const intern = await promptInternInfo()
         interns.push(intern);
         break;
       case "Finish building team":
@@ -116,7 +112,8 @@ async function promptEngineerInfo() {
       message: "Engineer's GitHub username: "
     }
   ])
-  return answers;
+  return new Engineer(answers.name, answers.id, answers.email, answers.github);
+
 }
 
 async function promptInternInfo() {
@@ -143,7 +140,7 @@ async function promptInternInfo() {
       message: "Intern's school: "
     }
   ])
-  return answers;
+  return new Intern(answers.name, answers.id, answers.email, answers.school);
 }
 
 async function writeToFile(team) {
@@ -158,6 +155,5 @@ async function writeToFile(team) {
   } catch (err) {
     console.log(err);
   }
-
 }
 
