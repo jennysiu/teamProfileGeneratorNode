@@ -58,12 +58,12 @@ const generateTeam = team => {
         `;
     };
 
-    // const html = [];
+    const html = [];
 
-    // html.push(team
-    //     .filter(employee => employee.getRole() === "Manager")
-    //     .map(manager => generateManager(manager))
-    // );
+    let manager = team[0];
+    html.push(generateManager(manager));
+
+    // ;
     // html.push(team
     //     .filter(employee => employee.getRole() === "Engineer")
     //     .map(engineer => generateEngineer(engineer))
@@ -75,8 +75,7 @@ const generateTeam = team => {
     //     .join("")
     // );
 
-    // return html.join("");
-
+    return html.join("");
 }
 
 // exports function to generate entire page

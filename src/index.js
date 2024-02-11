@@ -30,7 +30,7 @@ async function initPrompts() {
   } while (memberChoice !== "Finish building team") 
 
   let team = [manager, engineers, interns]
-  // console.log(team)
+  console.log(team)
   writeToFile(team);
 }
 
@@ -148,6 +148,7 @@ async function promptInternInfo() {
 
 async function writeToFile(team) {
   console.log("Starting write to file..");
+  console.log(team)
 
   try {
     const html = pageTemplate(team);
@@ -157,7 +158,6 @@ async function writeToFile(team) {
   } catch (err) {
     console.log(err);
   }
-
 
 }
 
