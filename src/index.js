@@ -5,7 +5,6 @@ const Engineer = require("../lib/Engineer");
 const Intern = require("../lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
-const fs = require("fs");
 const fsp = require("fs/promises");
 const { type } = require("os");
 
@@ -17,7 +16,7 @@ const pageTemplate = require("../src/page-template");
 let engineers = [];
 let interns = [];
 
-// TODO: Write Code to gather information about the development team members, and render the HTML file.
+// -- TODO: Write Code to gather information about the development team members, and render the HTML file.
 
 // start user prompts
 async function initPrompts() {
