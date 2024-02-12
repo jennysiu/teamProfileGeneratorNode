@@ -16,8 +16,7 @@ const pageTemplate = require("../src/page-template");
 let engineers = [];
 let interns = [];
 
-// -- TODO: Write Code to gather information about the development team members, and render the HTML file.
-
+// gather information about the development team members
 // start user prompts
 async function initPrompts() {
   let manager = await promptManagerInfo()
@@ -142,6 +141,7 @@ async function promptInternInfo() {
   return new Intern(answers.name, answers.id, answers.email, answers.school);
 }
 
+// and render the HTML file
 async function writeToFile(team) {
   console.log("Starting write to file..");
   console.log(team)
