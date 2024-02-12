@@ -8,7 +8,7 @@
 /* COLOUR PALETTE */
 :root {
   --primary-colour: #5B84B1FF;
-  --accent-colour: #FC766AFF;
+  --accent-colour: rgb(199, 89, 79);
   --background: #F0F0F0FF;
   --primary-text: #333333FF;
   --secondary-text: #666666FF;
@@ -28,52 +28,39 @@ body {
 
 header {
   text-align: center;
-  margin-bottom: 20px;
 }
 
 h1 {
-  font-size: 24px;
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
-/* Team member styles */
-.team-member {
-  background-color: #fff;
+
+/* Team card styles */
+
+.employee-card {
+  background-color: var(--background);
   border-radius: 5px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
+  text-align: center;
+  color: var(--primary-text);
 }
 
-.team-member h2 {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
+.card-header {
+  background-color: var(--accent-colour);
+  color: var(--background);
 }
 
-.team-member p {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 5px;
-}
-
-.team-member .role {
-  font-weight: bold;
-}
-
-.team-member .email {
-  color: #999;
-}
 
 /* Footer styles */
 footer {
+  width: 100%;
   text-align: center;
   margin-top: 20px;
 }
 
 footer p {
+  text-align: center;
   font-size: 12px;
   color: #999;
 }
